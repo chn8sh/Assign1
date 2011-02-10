@@ -7,7 +7,9 @@
  *		 08 February 2011	(last updated)		Modified by: Christopher Nostrand
  */
 #include "List.h"
-//#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // prototypes
 int compareTo(const void *this, const void *other);
@@ -35,8 +37,8 @@ int main(int argc, char **argv)
 	// initialize variables
 	// TODO rewrite error messages to standerd error
 	char *options[] = {"echo", "sort", "tail", "tail-remove"};
-	List *list = (List *) malloc(sizeof(List));;
-	list_init(list, compareTo, NULL); // TODO provide delete function
+	List *list;
+	list_init(list, compareTo, '\0'); // TODO provide delete function
 
 	// checks for correct # of arguments
 	if(argc != 3)
@@ -49,7 +51,7 @@ int main(int argc, char **argv)
 	FILE *fp = fopen(argv[1], "r");
 	if(ferror(fp))
 	{
-		printf("Cannot open file: %s \n", argv[1]);
+		printf("Cannot open file: %s\n", argv[1]);
 		exit(0);
 	}
 
@@ -64,7 +66,7 @@ int main(int argc, char **argv)
 		printf("does something\n"); // do something
 	else // 2nd argument is invalid
 	{
-		printf("Invalid input argument: %s \n", argv[2]);
+		printf("Invalid input argument: %s\n", argv[2]);
 		exit(0);
 	}
 
@@ -84,7 +86,9 @@ int main(int argc, char **argv)
  */
 int compareTo(const void *this, const void *other)
 {
-	const char *str1 = this, *str2 = other;
+	char *str1, *str2;
+	str1 = this;
+	str2 = other;
 	return strcmp(str1, str2);
 }
 
@@ -98,36 +102,24 @@ int compareTo(const void *this, const void *other)
  */
 void echo(FILE *fp)
 {
-	char str[256];
+	char *str;
 	int check;
 	check = fscanf(fp, "%s", str);
 	while(check != EOF)
 	{
-		printf("%s \n", str);
+		printf("%s\n", str);
 		check = fscanf(fp, "%s", str);
 	}
 }
 
 void sort(FILE *fp, List *l)
 {
-	char str[256];
+	char *str;
 	int check;
 	check = fscanf(fp, "%s", str);
 	while(check != EOF)
 	{
 		list_insert_sorted(l, str);
-		check = fscanf(fp, "%s", str);
-	}
-}
-
-void tail(FILE *fp, List *l)
-{
-	char str[256];
-	int check;
-	check = fscanf(fp, "%s", str);
-	while(check != EOF)
-	{
-		list_insert_tail(l, str);// TDDO l is still NULL :(
 		check = fscanf(fp, "%s", str);
 	}
 }

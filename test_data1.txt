@@ -1,0 +1,15 @@
+test_data1.txt
+This is a data file for you to use when testing your code for Assignment 1.
+It has some short lines,
+like these two.
+It also has a very, very, very, very long line that seems to run on forever and ever and ever, although it can't really be infinite, now can it?	However, it's long enough that you need to make sure you have allocated enough space in your buffers and other data structures to accommodate it. In fact, you probably shouldn't put a fixed upper limit on the size of any character string.
+
+And there's some numeric data: 1 2	3.1415926	4 5 6 7 8 9 10
+
+And a few special characters: !@#$%^&* (that have no special meaning in this context).
+
+And	then	there	are	
+these	lines	with	<tab>	characters	as	separators.
+
+And then there is the end:
+THE END. [Brought to you by the Ketchup Advisory Board.]
