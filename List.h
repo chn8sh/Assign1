@@ -124,13 +124,20 @@ void list_insert_tail(List *l, void *v) {
 
 	struct node* newNode;		//Create the new node
 
-	newNode= malloc(sizeof(struct node)); // allocate memory
+	//Check to make sure that memory is free, if not send error msg to std output
+	if(newNode= malloc(sizeof(struct node)) != NULL){  // allocate memory
+		newNode->datum = *v;		//initialize the datum
+		newNode->next = NULL;		//set the next pointer for the new node to NULL
+		newNode->prev = TheHead;	//set the prev pointer for the new node to the old tail node
 
-	newNode->datum = *v;		//initialize the datum
-	newNode->next = NULL;		//set the next pointer for the new node to NULL
-	newNode->prev = TheHead;	//set the prev pointer for the new node to the old tail node
+		l->tail = newNode;			//set the tail node to the new node
+	}
+	else{
+		//print error message on the std output line
+		fprintf(stderr,"There is no more memory - cannot insert a new node");
+	}
 
-	l->tail = newNode;			//set the tail node to the new node
+
 
 
 
