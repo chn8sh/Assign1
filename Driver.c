@@ -85,8 +85,6 @@ int main(int argc, char **argv)
 int compareTo(const void *this, const void *other)
 {
 	const char *str1 = this, *str2 = other;
-	//str1 = this;
-	//str2 = other;
 	return strcmp(str1, str2);
 }
 
@@ -118,6 +116,18 @@ void sort(FILE *fp, List *l)
 	while(check != EOF)
 	{
 		list_insert_sorted(l, str);
+		check = fscanf(fp, "%s", str);
+	}
+}
+
+void tail(FILE *fp, List *l)
+{
+	char str[256];
+	int check;
+	check = fscanf(fp, "%s", str);
+	while(check != EOF)
+	{
+		list_insert_tail(l, str);// TDDO l is still NULL :(
 		check = fscanf(fp, "%s", str);
 	}
 }
