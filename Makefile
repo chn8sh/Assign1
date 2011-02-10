@@ -14,8 +14,8 @@ OUTPUT = run
 
 
 # target rules
-compile: List.h $(OFILES)
+compile: $(OFILES)
 	$(CC) $(CFLAGS) $(OFILES) -o $(OUTPUT)
 
 clean: 
-	rm *.o *.stackdump run
+	rm *.o *.stackdump *~ run

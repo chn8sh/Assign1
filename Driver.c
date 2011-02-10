@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 	// initialize variables
 	// TODO rewrite error messages to standerd error
 	char *options[] = {"echo", "sort", "tail", "tail-remove"};
-	List *list = NULL;
+	List *list = (List *) malloc(sizeof(List));;
 	list_init(list, compareTo, NULL); // TODO provide delete function
 
 	// checks for correct # of arguments

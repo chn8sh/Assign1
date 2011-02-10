@@ -70,7 +70,6 @@ typedef struct {
 void list_init(List *l, int(*compare)(const void *this, const void *other),
 		void(*datum_delete)(void *datum)) {
 
-	l = (List *) malloc(sizeof(List));
 	l->head = l->tail = NULL;
 	l->length = 0;
 	l->compare = compare;
