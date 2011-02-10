@@ -4,7 +4,7 @@
  *
  * @author Christopher Nostrand, Patrick Gildea, Brooks Beverstock
  * @date 06 February 2011	(created)
- *		 08 February 2011	(last updated)		Modified by: Christopher Nostrand
+ *		 09 February 2011	(last updated)		Modified by: Christopher Nostrand
  */
 #ifndef LIST_H_
 #define LIST_H_
@@ -53,7 +53,7 @@ typedef struct node
 typedef struct
 {
 	Node *head, *tail;
-	unsigned length;
+	unsigned int length;
 	int (*compare)(const void *this, const void *other);
 	void (*datum_delete)(void *);
 } List;
@@ -74,11 +74,10 @@ void list_init(List *l,
 			   int (*compare)(const void *this, const void *other),
 			   void (*datum_delete)(void *datum))
 {
-  l = (List *)malloc( sizeof(List) );
-  l->head = l->tail = NULL;
-  l->length = 0;
-  l->compare = compare;
-  l->datum_delete = datum_delete;
+	l->head = l->tail = NULL;
+	l->length = 0;
+	l->compare = compare;
+	l->datum_delete = datum_delete;
 }
 
 //Part 3: Patrick
@@ -128,7 +127,6 @@ void list_insert_sorted(List *l, void *v)
 
 	// insert new
 	if(l->length == 0) // first item in the list
-
 	{
 		l->head = l->tail = &new;
 		new.prev = new.next = NULL;
@@ -139,10 +137,13 @@ void list_insert_sorted(List *l, void *v)
 		for(probe = l->head; probe != NULL; probe = probe->next)
 			if( l->compare(new.datum, probe->datum) <= 0 )
 				break;
+
 		// determine case
 		if(probe == l->head) // case 1: new belongs before first Node
 		{
 			new.prev = NULL;
+			//new.next = l->head;
+			//l->head->prev = l->head = &new;
 			new.next = probe;
 			probe->prev = l->head = &new;
 		}

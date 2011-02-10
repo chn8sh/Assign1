@@ -4,7 +4,7 @@
  *
  * @author Christopher Nostrand, Patrick Gildea, Brooks Beverstock
  * @date 06 February 2011	(created)
- *		 08 February 2011	(last updated)		Modified by: Christopher Nostrand
+ *		 09 February 2011	(last updated)		Modified by: Christopher Nostrand
  */
 #include "List.h"
 //#include <string.h>
@@ -35,8 +35,14 @@ int main(int argc, char **argv)
 	// initialize variables
 	// TODO rewrite error messages to standerd error
 	char *options[] = {"echo", "sort", "tail", "tail-remove"};
-	List *list = NULL;
+	List *list = (List *)malloc( sizeof(List) );
+	if(list == NULL)
+	{
+		printf("Error allocating list");
+		exit(0);
+	}
 	list_init(list, compareTo, NULL); // TODO provide delete function
+	printf("length is %d\n", list->length);
 
 	// checks for correct # of arguments
 	if(argc != 3)
@@ -49,7 +55,7 @@ int main(int argc, char **argv)
 	FILE *fp = fopen(argv[1], "r");
 	if(ferror(fp))
 	{
-		printf("Cannot open file: %s \n", argv[1]);
+		printf("Cannot open file: %s\n", argv[1]);
 		exit(0);
 	}
 
@@ -64,7 +70,7 @@ int main(int argc, char **argv)
 		printf("does something\n"); // do something
 	else // 2nd argument is invalid
 	{
-		printf("Invalid input argument: %s \n", argv[2]);
+		printf("Invalid input argument: %s\n", argv[2]);
 		exit(0);
 	}
 
@@ -85,8 +91,6 @@ int main(int argc, char **argv)
 int compareTo(const void *this, const void *other)
 {
 	const char *str1 = this, *str2 = other;
-	//str1 = this;
-	//str2 = other;
 	return strcmp(str1, str2);
 }
 
@@ -105,7 +109,7 @@ void echo(FILE *fp)
 	check = fscanf(fp, "%s", str);
 	while(check != EOF)
 	{
-		printf("%s \n", str);
+		printf("%s\n", str);
 		check = fscanf(fp, "%s", str);
 	}
 }
@@ -120,6 +124,7 @@ void sort(FILE *fp, List *l)
 		list_insert_sorted(l, str);
 		check = fscanf(fp, "%s", str);
 	}
+	printf("\n");
 }
 
 // method header

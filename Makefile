@@ -3,7 +3,7 @@
 #
 # @author Christopher Nostrand (chn8sh)
 # @date 06 February 2011	(created)
-#		06 February 2011	(last updated)		Modified by: Christopher Nostrand
+#		09 February 2011	(last updated)		Modified by: Christopher Nostrand
 
 # macros
 CC = gcc
