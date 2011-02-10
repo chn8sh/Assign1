@@ -11,6 +11,7 @@
 
 // prototypes
 int compareTo(const void *this, const void *other);
+void delete(Node * deleted);
 void echo(FILE *fp);
 void sort(FILE *fp, List *l);
 
@@ -35,7 +36,8 @@ int main(int argc, char **argv)
 	// initialize variables
 	// TODO rewrite error messages to standerd error
 	char *options[] = {"echo", "sort", "tail", "tail-remove"};
-	List *list = (List *) malloc(sizeof(List));;
+	List head;
+	List *list = &head;
 	list_init(list, compareTo, NULL); // TODO provide delete function
 
 	// checks for correct # of arguments
@@ -47,7 +49,7 @@ int main(int argc, char **argv)
 
 	// open file: 1st argument
 	FILE *fp = fopen(argv[1], "r");
-	if(ferror(fp))
+	if(fp == NULL || ferror(fp))
 	{
 		printf("Cannot open file: %s \n", argv[1]);
 		exit(0);
@@ -86,6 +88,16 @@ int compareTo(const void *this, const void *other)
 {
 	const char *str1 = this, *str2 = other;
 	return strcmp(str1, str2);
+}
+void delete(Node *deleted) {
+	Node *prev, *next;
+	if (deleted != NULL) {
+		prev = deleted->prev;
+		next = deleted->next;
+		prev->next = next;
+		next->prev = prev;
+		free(deleted);
+	}
 }
 
 /**
