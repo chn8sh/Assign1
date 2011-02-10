@@ -10,7 +10,7 @@ CC = gcc
 CFLAGS = -ggdb -Wall
 OFILES = Driver.o
 OUTPUT = run
-.SUFFIXES: .o .c
+.SUFFIXES: .o .cpp
 
 
 # target rules
@@ -18,4 +18,4 @@ compile: $(OFILES)
 	$(CC) $(CFLAGS) $(OFILES) -o $(OUTPUT)
 
 clean: 
-	rm *.o *.stackdump *~ run
+	rm *.o *~ run
