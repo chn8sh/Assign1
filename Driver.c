@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 	// initialize variables
 	// TODO rewrite error messages to standerd error
 	char *options[] = {"echo", "sort", "tail", "tail-remove"};
-	List *list;
+	List *list = NULL;
 	list_init(list, compareTo, NULL); // TODO provide delete function
 
 	// checks for correct # of arguments
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 	FILE *fp = fopen(argv[1], "r");
 	if(ferror(fp))
 	{
-		printf("Cannot open file: %s\n", argv[1]);
+		printf("Cannot open file: %s \n", argv[1]);
 		exit(0);
 	}
 
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 		printf("does something\n"); // do something
 	else // 2nd argument is invalid
 	{
-		printf("Invalid input argument: %s\n", argv[2]);
+		printf("Invalid input argument: %s \n", argv[2]);
 		exit(0);
 	}
 
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
  */
 int compareTo(const void *this, const void *other)
 {
-	char *str1 = this, *str2 = other;
+	const char *str1 = this, *str2 = other;
 	//str1 = this;
 	//str2 = other;
 	return strcmp(str1, str2);
@@ -105,7 +105,7 @@ void echo(FILE *fp)
 	check = fscanf(fp, "%s", str);
 	while(check != EOF)
 	{
-		printf("%s\n", str);
+		printf("%s \n", str);
 		check = fscanf(fp, "%s", str);
 	}
 }
