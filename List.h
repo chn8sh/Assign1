@@ -173,7 +173,7 @@ void list_insert_tail(List *l, void *v) {
  */
 void list_insert_sorted(List *l, void *v) {
 	// initialize variables
-		Node new, *probe;
+		Node *new = (Node*)malloc(sizeof(Node)), *probe;
 
 		new->datum = v;
 
