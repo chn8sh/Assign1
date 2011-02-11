@@ -2,7 +2,7 @@
  * @file List.h
  * stores List class
  *
- * @author Christopher Nostrand
+ * @author Christopher Nostrand, Patrick Gildea, Brooks Beverstock
  * @date 06 February 2011	(created)
  *		 06 February 2011	(last updated)		Modified by: Christopher Nostrand
  *		 08 February 2011	(last updated)		Modified by: Patrick Gildea
