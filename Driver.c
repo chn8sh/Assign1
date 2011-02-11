@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	if(argc != 3)
 	{
 		fprintf(stderr, "Invalid number of arguments: %d\n", argc-1);
-		exit(0);
+		exit(1);
 	}
 
 	// open file: 1st argument
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 	if(ferror(fp))
 	{
 		fprintf(stderr, "Cannot open file: %s\n", argv[1]);
-		exit(0);
+		exit(1);
 	}
 
 	// retrieve data
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 		else // 2nd argument is invalid
 		{
 			fprintf(stderr, "Invalid input argument: %s\n", argv[2]);
-			exit(0);
+			exit(1);
 		}
 		line[++length] = getc(fp);
 	}
@@ -126,7 +126,7 @@ void echo(char *line)
 	}
 }
 
-void delete_list()
+void delete_list(List *l)
 {
 
 

@@ -83,30 +83,63 @@ void list_init(List *l,
 //Part 3: Patrick
 /**
  * @method list_visit_items
- * method_description
+ * This method prints each item in the linked list
  *
- * @param args	command line parameters
- * @pre  description
- * @post description
+ * @param l list
+ * @param v datum to be stored
+ * @pre list points to a initialized list and v point to a vaild datum
+ * @post v is inserted into l
  */
-void list_visit_items(List *l,
-					  void (*visitor)(void *v))
+void list_visit_items(List *l, void(*visitor)(void *v))
 {
+	//variable to hold the current node
+	struct Node* current = l->head;
 
+	//iterate through the list until the last item in the list
+	//is reached which has a NULL tail pointer
+	while(current != NULL)
+	{
+		//print the datum as a string
+		//printf("%s",current->datum);
+
+		//calls on the function in v
+		visitor(current->datum);
+
+		//move to the next node
+		current = current->next;
+	}
 }
 
 //Part 4: Patrick
 /**
  * @method list_insert_tail
- * method_description
+ * Inserts an element into the list (at the beginning) and prints the contents of the list.
  *
- * @param args	command line parameters
- * @pre  description
- * @post description
+ * @param l The list
+ * @param v datum to be stored
+ * @pre list points to a initialized list and v point to a valid datum
+ * @post v is inserted into l
  */
 void list_insert_tail(List *l, void *v)
 {
+	//variable to hold the tail node
+	Node *TheHead = l->tail;
 
+	Node *newNode; // create the new node
+
+	// check to make sure that memory is free, if not send error msg to std output
+	if(newNode= malloc(sizeof(struct node)) != NULL) // allocate memory
+	{
+		newNode->datum = *v; // initialize the datum
+		newNode->next = NULL; // set the next pointer for the new node to NULL
+		newNode->prev = TheHead; // set the prev pointer for the new node to the old tail node
+
+		l->tail = newNode; //set the tail node to the new node
+	}
+	else { // print error message on the std output line
+		fprintf(stderr,"There is no more memory - cannot insert a new node");
+		exit(1);
+	}
 }
 
 //Part 5: Chris
