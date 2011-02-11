@@ -11,8 +11,8 @@
 
 // prototypes
 int compareTo(const void *this, const void *other);
-void echo(FILE *fp);
-void sort(FILE *fp, List *l);
+void echo(char *str);
+void delete_list(List *l);
 
 /**
  * @method main
@@ -35,19 +35,13 @@ int main(int argc, char **argv)
 	// initialize variables
 	// TODO rewrite error messages to standerd error
 	char *options[] = {"echo", "sort", "tail", "tail-remove"};
-	List *list = (List *)malloc( sizeof(List) );
-	if(list == NULL)
-	{
-		printf("Error allocating list");
-		exit(0);
-	}
-	list_init(list, compareTo, NULL); // TODO provide delete function
-	printf("length is %d\n", list->length);
+	List list;
+	list_init(&list, compareTo, NULL); // TODO provide delete function
 
 	// checks for correct # of arguments
 	if(argc != 3)
 	{
-		printf("Invalid number of arguments: %d\n", argc-1);
+		fprintf(stderr, "Invalid number of arguments: %d\n", argc-1);
 		exit(0);
 	}
 
@@ -55,25 +49,44 @@ int main(int argc, char **argv)
 	FILE *fp = fopen(argv[1], "r");
 	if(ferror(fp))
 	{
-		printf("Cannot open file: %s\n", argv[1]);
+		fprintf(stderr, "Cannot open file: %s\n", argv[1]);
 		exit(0);
 	}
 
-	// determine operation: 2nd argument
-	if( strcmp(argv[2], options[0]) == 0 ) // argv[2] == "echo"
-		echo(fp);
-	else if( strcmp(argv[2], options[1]) == 0 ) // argv[2] == "sort"
-		sort(fp, list);
-	else if( strcmp(argv[2], options[2]) == 0 ) // argv[2] == "tail"
-		printf("does something\n"); // call function to print words
-	else if( strcmp(argv[2], options[3]) == 0 ) // argv[2] == "tail-remove"
-		printf("does something\n"); // do something
-	else // 2nd argument is invalid
+	// retrieve data
+	char line[256];
+	int length = 0;
+	line[length] = getc(fp);
+	while( line[length] != EOF )
 	{
-		printf("Invalid input argument: %s\n", argv[2]);
-		exit(0);
-	}
+		// get line
+		while(line[length] != '\n')
+			line[++length] = getc(fp);
 
+		// determine operation: 2nd argument
+		if( strcmp(argv[2], options[0]) == 0 ) // argv[2] == "echo"
+			echo(line);
+		else if( strcmp(argv[2], options[1]) == 0 ) // argv[2] == "sort"
+		{
+			char *datum = (char *)malloc(length);
+			memcpy(datum, line, length);
+			list_insert_sorted(&list, datum);
+		}
+		else if( strcmp(argv[2], options[2]) == 0 ) // argv[2] == "tail"
+		{
+			char *datum = (char *)malloc(length);
+			memcpy(datum, line, length);
+			list_insert_tail(&list, datum);
+		}
+		else if( strcmp(argv[2], options[3]) == 0 ) // argv[2] == "tail-remove"
+			delete_list(&list);
+		else // 2nd argument is invalid
+		{
+			fprintf(stderr, "Invalid input argument: %s\n", argv[2]);
+			exit(0);
+		}
+		line[++length] = getc(fp);
+	}
 	fclose(fp);
 	return 0;
 }
@@ -96,35 +109,27 @@ int compareTo(const void *this, const void *other)
 
 /**
  * @method echo
- * reads all characters from a file (ignoring white-spaces) and prints each word on a separate line
+ * reads all characters from a string (ignoring white-spaces) and prints each word on a separate line
  *
- * @param fp	pointer to position in the specified file
- * @pre  fp points to a valid file in memory
- * @post the contents of the file is displayed
+ * @param line	pointer to a string
+ * @pre  line points to a valid string in memory
+ * @post the contents of the string is displayed
  */
-void echo(FILE *fp)
+void echo(char *line)
 {
 	char str[256];
-	int check;
-	check = fscanf(fp, "%s", str);
+	int check = sscanf(line, "%s", str);
 	while(check != EOF)
 	{
 		printf("%s\n", str);
-		check = fscanf(fp, "%s", str);
+		check = sscanf(line, "%s", str);
 	}
 }
 
-void sort(FILE *fp, List *l)
+void delete_list()
 {
-	char str[256];
-	int check;
-	check = fscanf(fp, "%s", str);
-	while(check != EOF)
-	{
-		list_insert_sorted(l, str);
-		check = fscanf(fp, "%s", str);
-	}
-	printf("\n");
+
+
 }
 
 // method header

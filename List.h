@@ -122,42 +122,42 @@ void list_insert_tail(List *l, void *v)
 void list_insert_sorted(List *l, void *v)
 {
 	// initialize variables
-	Node new, *probe;
-	new.datum = v;
+	Node *new = (Node *)malloc( sizeof(Node) ), *probe;
+	new->datum = v;
 
 	// insert new
 	if(l->length == 0) // first item in the list
 	{
-		l->head = l->tail = &new;
-		new.prev = new.next = NULL;
+		l->head = l->tail = new;
+		new->prev = new->next = NULL;
 	}
 	else // length > 1; 3 cases
 	{
 		// locate position to insert
 		for(probe = l->head; probe != NULL; probe = probe->next)
-			if( l->compare(new.datum, probe->datum) <= 0 )
+			if( l->compare(new->datum, probe->datum) <= 0 )
 				break;
 
 		// determine case
 		if(probe == l->head) // case 1: new belongs before first Node
 		{
-			new.prev = NULL;
-			//new.next = l->head;
-			//l->head->prev = l->head = &new;
-			new.next = probe;
-			probe->prev = l->head = &new;
+			new->prev = NULL;
+			//new->next = l->head;
+			//l->head->prev = l->head = new;
+			new->next = probe;
+			probe->prev = l->head = new;
 		}
 		else if(probe == NULL) // case 2: ran off list
 		{
-			new.prev = l->tail;
-			new.next = NULL;
-			l->tail->next = l->tail = &new;
+			new->prev = l->tail;
+			new->next = NULL;
+			l->tail->next = l->tail = new;
 		}
 		else // case 3: somewhere in the middle of the list
 		{
-			new.prev = probe->prev;
-			new.next = probe;
-			probe->prev->next = probe->prev = &new;
+			new->prev = probe->prev;
+			new->next = probe;
+			probe->prev->next = probe->prev = new;
 		}
 	}
 	l->length++; // increase size
@@ -166,15 +166,18 @@ void list_insert_sorted(List *l, void *v)
 //Part 6: Brooks
 /**
  * @method list_remove_head
- * method_description
+ * removes a data from the front of the list
  *
- * @param args	command line parameters
- * @pre  description
- * @post description
+ * @param list	pointer to a list
+ * @pre  list must point to a valid List in memory
+ * @post first Node in the list is deleted
  */
 void list_remove_head(List *list)
 {
-
+	Node *temp = list->head;
+	list->head = list->head->next;
+	list->datum_delete(temp->datum);
+	free(temp);
 }
 
 #endif /* LIST_H_ */
