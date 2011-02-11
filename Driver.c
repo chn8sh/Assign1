@@ -7,12 +7,12 @@
  *		 09 February 2011	(last updated)		Modified by: Christopher Nostrand
  */
 #include "List.h"
-//#include <string.h>
 
 // prototypes
 int compareTo(const void *this, const void *other);
 void echo(char *str);
 void delete_list(List *l);
+void print(void *v);
 
 /**
  * @method main
@@ -71,12 +71,14 @@ int main(int argc, char **argv)
 			char *datum = (char *)malloc(length);
 			memcpy(datum, line, length);
 			list_insert_sorted(&list, datum);
+			list_visit_items(&list, print);
 		}
 		else if( strcmp(argv[2], options[2]) == 0 ) // argv[2] == "tail"
 		{
 			char *datum = (char *)malloc(length);
 			memcpy(datum, line, length);
 			list_insert_tail(&list, datum);
+			list_visit_items(&list, print);
 		}
 		else if( strcmp(argv[2], options[3]) == 0 ) // argv[2] == "tail-remove"
 			delete_list(&list);
@@ -130,6 +132,20 @@ void delete_list(List *l)
 {
 
 
+}
+
+/**
+ * @method print
+ * prints the value to standard out
+ *
+ * @param v		pointer to a string
+ * @pre  v is a valid pointer to a string in memory
+ * @post a string is displayed
+ */
+void print(void *v)
+{
+	char *str = v;
+	printf("%s", str);
 }
 
 // method header
