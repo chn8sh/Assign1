@@ -10,6 +10,10 @@
 #ifndef LIST_H_
 #define LIST_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 /**
  * @class List
  * This C style class (a struct) implements a two doubly-linked list with nodes to hold data
@@ -88,11 +92,11 @@ void list_init(List *l, int(*compare)(const void *this, const void *other),
 
 void list_visit_items(List *l, void(*visitor)(void *v)) {
 	//variable to hold the current node
-	struct Node* current = l->head;
+	Node *current = l->head;
 
 	//iterate through the list until the last item in the list
 	//is reached which has a NULL tail pointer
-	while(current != NULL){
+	while(&current != NULL){
 		//print the datum as a string
 		//printf("%s",current->datum);
 
@@ -120,13 +124,14 @@ void list_visit_items(List *l, void(*visitor)(void *v)) {
 void list_insert_tail(List *l, void *v) {
 
 	//variable to hold the tail node
-	struct node* TheHead = l->tail;
+	Node* TheHead = l->tail;
 
-	struct node* newNode;		//Create the new node
+	Node* newNode;		//Create the new node
 
+	newNode= malloc(sizeof(struct node));
 	//Check to make sure that memory is free, if not send error msg to std output
-	if(newNode= malloc(sizeof(struct node)) != NULL){  // allocate memory
-		newNode->datum = *v;		//initialize the datum
+	if(newNode != NULL){  // allocate memory
+		newNode->datum = v;		//initialize the datum
 		newNode->next = NULL;		//set the next pointer for the new node to NULL
 		newNode->prev = TheHead;	//set the prev pointer for the new node to the old tail node
 
