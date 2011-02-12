@@ -4,7 +4,7 @@
  *
  * @author Christopher Nostrand, Patrick Gildea, Brooks Beverstock
  * @date 06 February 2011	(created)
- *		 09 February 2011	(last updated)		Modified by: Christopher Nostrand
+ *		 11 February 2011	(last updated)		Modified by: Christopher Nostrand
  */
 #ifndef LIST_H_
 #define LIST_H_
@@ -93,7 +93,7 @@ void list_init(List *l,
 void list_visit_items(List *l, void(*visitor)(void *v))
 {
 	//variable to hold the current node
-	struct Node* current = l->head;
+	Node* current = l->head;
 
 	//iterate through the list until the last item in the list
 	//is reached which has a NULL tail pointer
@@ -122,24 +122,30 @@ void list_visit_items(List *l, void(*visitor)(void *v))
  */
 void list_insert_tail(List *l, void *v)
 {
-	//variable to hold the tail node
-	Node *TheHead = l->tail;
-
-	Node *newNode; // create the new node
+	// variable to hold the tail node
+	Node *newNode = malloc( sizeof(Node) ); // create the new node
 
 	// check to make sure that memory is free, if not send error msg to std output
-	if(newNode= malloc(sizeof(struct node)) != NULL) // allocate memory
-	{
-		newNode->datum = *v; // initialize the datum
-		newNode->next = NULL; // set the next pointer for the new node to NULL
-		newNode->prev = TheHead; // set the prev pointer for the new node to the old tail node
-
-		l->tail = newNode; //set the tail node to the new node
-	}
-	else { // print error message on the std output line
-		fprintf(stderr,"There is no more memory - cannot insert a new node");
+	if(newNode == NULL) { // print error message on the std output line
+		fprintf(stderr, "There is no more memory - cannot insert a new node");
 		exit(1);
 	}
+
+	newNode->datum = v; // initialize the datum
+
+	if(l->length == 0) // first item in the list
+	{
+		l->head = l->tail = newNode;
+		newNode->prev = newNode->next = NULL;
+	}
+	else
+	{
+		newNode->next = NULL; // set the next pointer for the new node to NULL
+		newNode->prev = l->tail; // set the prev pointer for the new node to the old tail node
+		l->tail->next = newNode; //set the tail node to the new node
+		l->tail = newNode;
+	}
+	l->length++;
 }
 
 //Part 5: Chris
@@ -155,8 +161,13 @@ void list_insert_tail(List *l, void *v)
 void list_insert_sorted(List *l, void *v)
 {
 	// initialize variables
-	Node *new = (Node *)malloc( sizeof(Node) ), *probe;
+	Node *new = malloc( sizeof(Node) ), *probe;
+	if(new == NULL) {
+		fprintf(stderr, "There is no more memory - cannot insert a new node");
+		exit(1);
+	}
 	new->datum = v;
+	//printf("@%s\n", new->datum);
 
 	// insert new
 	if(l->length == 0) // first item in the list
@@ -175,8 +186,6 @@ void list_insert_sorted(List *l, void *v)
 		if(probe == l->head) // case 1: new belongs before first Node
 		{
 			new->prev = NULL;
-			//new->next = l->head;
-			//l->head->prev = l->head = new;
 			new->next = probe;
 			probe->prev = l->head = new;
 		}
@@ -210,6 +219,7 @@ void list_remove_head(List *list)
 	Node *temp = list->head;
 	list->head = list->head->next;
 	list->datum_delete(temp->datum);
+	temp->prev = temp->next = NULL;
 	free(temp);
 }
 
