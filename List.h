@@ -17,7 +17,9 @@
  * @class List
  * This C style class (a struct) implements a two doubly-linked list with nodes to hold data
  *
- *		void list_visit_items(List *l, void (*visitor)(void *v))
+ *		void list_init(List *l, int (*compare)(const void *this, const void *other),
+ *			void (*datum_delete)(void *datum)) constructor
+ *		void list_visit_items(List *l, void (*visitor)(void *v)) constructor
  *		void list_insert_tail(List *l, void *v)
  *		void list_insert_sorted(List *l, void *v)
  *		void list_remove_head(List *list)
@@ -46,9 +48,8 @@ typedef struct node
  *		Node *head		- pointer to the front of the list
  *		Node *tail		- pointer to the back of the list
  *		unsigned lenght	- size of the list
- *		int (*compare)(const void *this, const void *other) function pointer to a compare method
- *			for comparing data values
- *		void (*datum_delete)(void *) function pointer to a delete function for deleting nodes or the list
+ *		int *compare	- function pointer to a compare method for comparing data values
+ *		void *datum_delete - function pointer to a delete function for deleting nodes or the list
  */
 typedef struct
 {
@@ -80,15 +81,14 @@ void list_init(List *l,
 	l->datum_delete = datum_delete;
 }
 
-//Part 3: Patrick
 /**
  * @method list_visit_items
- * This method prints each item in the linked list
+ * This method calls a function each item in list
  *
- * @param l list
- * @param v datum to be stored
+ * @param l		list
+ *		  v		datum to be stored
  * @pre list points to a initialized list and v point to a vaild datum
- * @post v is inserted into l
+ * @post operation completed
  */
 void list_visit_items(List *l, void(*visitor)(void *v))
 {
@@ -110,7 +110,6 @@ void list_visit_items(List *l, void(*visitor)(void *v))
 	}
 }
 
-//Part 4: Patrick
 /**
  * @method list_insert_tail
  * Inserts an element into the list (at the beginning) and prints the contents of the list.
@@ -148,7 +147,6 @@ void list_insert_tail(List *l, void *v)
 	l->length++;
 }
 
-//Part 5: Chris
 /**
  * @method list_insert_sorted
  * inserts data into the list in sorted (ascending) order
@@ -167,7 +165,6 @@ void list_insert_sorted(List *l, void *v)
 		exit(1);
 	}
 	new->datum = v;
-	//printf("@%s\n", new->datum);
 
 	// insert new
 	if(l->length == 0) // first item in the list
@@ -205,10 +202,9 @@ void list_insert_sorted(List *l, void *v)
 	l->length++; // increase size
 }
 
-//Part 6: Brooks
 /**
  * @method list_remove_head
- * removes a data from the front of the list
+ * removes a Node and its data from the front of the list
  *
  * @param list	pointer to a list
  * @pre  list must point to a valid List in memory

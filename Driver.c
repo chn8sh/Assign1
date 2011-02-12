@@ -4,7 +4,7 @@
  *
  * @author Christopher Nostrand, Patrick Gildea, Brooks Beverstock
  * @date 06 February 2011	(created)
- *		 11 February 2011	(last updated)		Modified by: Christopher Nostrand
+ *		 12 February 2011	(last updated)		Modified by: Christopher Nostrand
  */
 #include "List.h"
 
@@ -32,14 +32,13 @@ void print(void *v);
  *
  * @param argc	number of arguments (first argument is name of executable)
  * 		  argv	pointer to arguments (command line parameters)
- * @pre  description
- * @post description
+ * @pre  none
+ * @post program is executed or terminates if errors occur
  * @return exit status '0' (normal exit)
  */
 int main(int argc, char **argv)
 {
 	// initialize variables
-	// TODO rewrite error messages to standerd error
 	char *options[] = {"echo", "sort", "tail", "tail-remove"};
 	List list;
 	list_init(&list, compareTo, delete); // TODO provide delete function
@@ -85,13 +84,15 @@ int main(int argc, char **argv)
 // --File I/O functions
 
 /**
- * @method main
- * method_description
+ * @method getLine
+ * retrieves one line from a file, store it in line, and returns its length
  *
- * @param args	command line parameters
- * @pre  description
- * @post description
- * @return description
+ * @param fp	pointer to a file
+ * 		  line	pointer to a string
+ * 		  c		a character
+ * @pre  fp points to a valid file, line points to a valid string, and c is a character
+ * @post line contains a string of characters
+ * @return length of string
  */
 int getLine(FILE *fp, char *line, char c)
 {
@@ -107,12 +108,12 @@ int getLine(FILE *fp, char *line, char c)
 
 // option functions
 
-/** TODO update header
+/**
  * @method echo
- * reads all characters from a string (ignoring white-spaces) and prints each word on a separate line
+ * reads all words from a file (ignoring white-spaces) and prints each word on a separate line
  *
- * @param line	pointer to a string
- * @pre  line points to a valid string in memory
+ * @param fp	pointer to a file
+ * @pre  fp points to a valid file
  * @post the contents of the string is displayed
  */
 void echo(FILE *fp)
@@ -126,46 +127,47 @@ void echo(FILE *fp)
 	}
 }
 
-/**  TODO update header
- * @method main
- * method_description
+/**
+ * @method list_insert_line
+ * inserts lines from a data file into a List
  *
- * @param args	command line parameters
- * @pre  description
- * @post description
- * @return description
+ * @param fp			pointer to a file
+ * 		  l				points to a list in memory
+ * 		  list_insert	points to function pointer that inserts data into l
+ * @pre  fp points to a valid file, l points to a valid List, and list_insert points to a valid function
+ * @post l is filled
  */
 void list_insert_line(FILE *fp, List *l,
 					  void(*list_insert)(List *l, void *v))
 {
+	// initialze variables
 	char line[1000], c = fgetc(fp);
 	int length = 0;
+
+	// insert lines
 	while(c != EOF)
 	{
 		length = getLine(fp, line, c); // retrieve line
-		//printf("%d %s", length, line);
 
 		if(length > 1) // skip empty lines
 		{
-			char *datum = malloc(length);
-			memcpy(datum, line, length);
-			//printf("%d %s", length, datum);
+			char *datum = (char *)malloc(length+1);
+			strcpy(datum, line);
 			list_insert(l, datum);
 		}
+		// reset values
 		length = 0;
 		c = fgetc(fp);
 	}
 }
 
-
-/**  TODO update header
- * @method main
- * method_description
+/**
+ * @method delete_list
+ * removes all data from list
  *
- * @param args	command line parameters
- * @pre  description
- * @post description
- * @return description
+ * @param l		pointer to a List in memory
+ * @pre  l points to a valid List in memory
+ * @post l is empty
  */
 void delete_list(List *l)
 {
@@ -205,13 +207,12 @@ int compareTo(const void *this, const void *other)
 }
 
 /**
- * @method main
- * method_description
+ * @method delete
+ * frees memory of a string
  *
- * @param args	command line parameters
- * @pre  description
- * @post description
- * @return description
+ * @param v		pointer to a string
+ * @pre  v points to a string
+ * @post memory is freed
  */
 void delete(void *v)
 {
@@ -232,18 +233,3 @@ void print(void *v)
 	char *str = v;
 	printf("%s", str);
 }
-
-
-
-
-// method header
-/**
- * @method main
- * method_description
- *
- * @param args	command line parameters
- * @pre  description
- * @post description
- * @return description
- */
-

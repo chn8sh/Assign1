@@ -3,13 +3,13 @@
 #
 # @author Christopher Nostrand (chn8sh)
 # @date 06 February 2011	(created)
-#		09 February 2011	(last updated)		Modified by: Christopher Nostrand
+#		12 February 2011	(last updated)		Modified by: Christopher Nostrand
 
 # macros
 CC = gcc
 CFLAGS = -ggdb -Wall
 OFILES = Driver.o
-OUTPUT = run
+OUTPUT = assign1
 .SUFFIXES: .o .c
 
 
